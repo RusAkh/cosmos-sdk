@@ -2,7 +2,7 @@
 package tendermintv1beta1
 
 import (
-	// _ "cosmossdk.io/api/amino"
+	_ "cosmossdk.io/api/amino"
 	v1beta1 "cosmossdk.io/api/cosmos/base/query/v1beta1"
 	p2p "cosmossdk.io/api/tendermint/p2p"
 	types "cosmossdk.io/api/tendermint/types"
