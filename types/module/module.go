@@ -146,6 +146,12 @@ func (bm BasicManager) AddQueryCommands(rootQueryCmd *cobra.Command) {
 	}
 }
 
+// HasServices is the interface for modules to register services.
+type HasServices interface {
+	// RegisterServices allows a module to register services.
+	RegisterServices(Configurator)
+}
+
 // AppModuleGenesis is the standard form for an application module genesis functions
 type AppModuleGenesis interface {
 	AppModuleBasic
