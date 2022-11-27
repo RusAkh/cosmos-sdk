@@ -14,22 +14,33 @@ import (
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	qtypes "github.com/cosmos/cosmos-sdk/types/query"
 	"github.com/cosmos/cosmos-sdk/version"
+	abci "github.com/tendermint/tendermint/abci/types"
 )
 
-// This is the struct that we will implement all the handlers on.
-type queryServer struct {
-	clientCtx         client.Context
-	interfaceRegistry codectypes.InterfaceRegistry
-}
+type (
+	abciQueryFn = func(abci.RequestQuery) abci.ResponseQuery
+
+	// This is the struct that we will implement all the handlers on.
+	queryServer struct {
+		clientCtx         client.Context
+		interfaceRegistry codectypes.InterfaceRegistry
+		queryFn           abciQueryFn
+	}
+)
 
 var _ ServiceServer = queryServer{}
 var _ codectypes.UnpackInterfacesMessage = &GetLatestValidatorSetResponse{}
 
 // NewQueryServer creates a new tendermint query server.
-func NewQueryServer(clientCtx client.Context, interfaceRegistry codectypes.InterfaceRegistry) ServiceServer {
+func NewQueryServer(
+	clientCtx client.Context,
+	interfaceRegistry codectypes.InterfaceRegistry,
+	queryFn abciQueryFn,
+) ServiceServer {
 	return queryServer{
 		clientCtx:         clientCtx,
 		interfaceRegistry: interfaceRegistry,
+		queryFn:           queryFn,
 	}
 }
 
@@ -199,14 +210,12 @@ func (s queryServer) GetNodeInfo(ctx context.Context, req *GetNodeInfoRequest) (
 
 // RegisterTendermintService registers the tendermint queries on the gRPC router.
 func RegisterTendermintService(
-	qrt gogogrpc.Server,
 	clientCtx client.Context,
-	interfaceRegistry codectypes.InterfaceRegistry,
+	server gogogrpc.Server,
+	iRegistry codectypes.InterfaceRegistry,
+	queryFn abciQueryFn,
 ) {
-	RegisterServiceServer(
-		qrt,
-		NewQueryServer(clientCtx, interfaceRegistry),
-	)
+	RegisterServiceServer(server, NewQueryServer(clientCtx, iRegistry, queryFn))
 }
 
 // RegisterGRPCGatewayRoutes mounts the tendermint service's GRPC-gateway routes on the

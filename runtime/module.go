@@ -33,6 +33,7 @@ func init() {
 			ProvideTransientStoreKey,
 			ProvideMemoryStoreKey,
 			ProvideDeliverTx,
+			//ProvideAutoCLIModuleOptions,
 		),
 		appmodule.Invoke(SetupAppBuilder),
 	)
@@ -142,3 +143,8 @@ func ProvideDeliverTx(appBuilder *AppBuilder) func(abci.RequestDeliverTx) abci.R
 		return appBuilder.app.BaseApp.DeliverTx(tx)
 	}
 }
+
+//// ProvideAutoCLIModuleOptions provides the autocli module options discovered by the app.
+//func ProvideAutoCLIModuleOptions(app *AppBuilder) map[string]*autocliv1.ModuleOptions {
+//	return services.NewAutoCLIQueryService(app.app.ModuleManager.Modules).ModuleOptions
+//}

@@ -24,7 +24,14 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-const initialAppVersion = 0
+// Supported ABCI Query prefixes
+const (
+	QueryPathApp = "app"
+	// QueryPathCustom   = "custom"
+	QueryPathP2P      = "p2p"
+	QueryPathStore    = "store"
+	initialAppVersion = 0
+)
 
 type AppVersionError struct {
 	Actual  uint64
@@ -397,14 +404,14 @@ func (app *BaseApp) halt() {
 
 // Query implements the ABCI interface. It delegates to CommitMultiStore if it
 // implements Queryable.
+// Query implements the ABCI interface. It delegates to CommitMultiStore if it
+// implements Queryable.
 func (app *BaseApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
-	defer telemetry.MeasureSince(time.Now(), "abci", "query")
-
 	// Add panic recovery for all queries.
 	// ref: https://github.com/cosmos/cosmos-sdk/pull/8039
 	defer func() {
 		if r := recover(); r != nil {
-			res = sdkerrors.QueryResultWithDebug(sdkerrors.Wrapf(sdkerrors.ErrPanic, "%v", r), app.trace)
+			res = sdkerrors.QueryResult(sdkerrors.Wrapf(sdkerrors.ErrPanic, "%v", r), app.trace)
 		}
 	}()
 
@@ -413,33 +420,34 @@ func (app *BaseApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 		req.Height = app.LastBlockHeight()
 	}
 
+	telemetry.IncrCounter(1, "query", "count")
+	telemetry.IncrCounter(1, "query", req.Path)
+	defer telemetry.MeasureSince(time.Now(), req.Path)
+
 	// handle gRPC routes first rather than calling splitPath because '/' characters
 	// are used as part of gRPC paths
 	if grpcHandler := app.grpcQueryRouter.Route(req.Path); grpcHandler != nil {
 		return app.handleQueryGRPC(grpcHandler, req)
 	}
 
-	path := splitPath(req.Path)
+	path := SplitABCIQueryPath(req.Path)
 	if len(path) == 0 {
-		sdkerrors.QueryResultWithDebug(sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "no query path provided"), app.trace)
+		return sdkerrors.QueryResult(sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "no query path provided"), app.trace)
 	}
 
 	switch path[0] {
-	// "/app" prefix for special application queries
-	case "app":
+	case QueryPathApp:
+		// "/app" prefix for special application queries
 		return handleQueryApp(app, path, req)
 
-	case "store":
+	case QueryPathStore:
 		return handleQueryStore(app, path, req)
 
-	case "p2p":
+	case QueryPathP2P:
 		return handleQueryP2P(app, path)
-
-	case "custom":
-		return handleQueryCustom(app, path, req)
 	}
 
-	return sdkerrors.QueryResultWithDebug(sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown query path"), app.trace)
+	return sdkerrors.QueryResult(sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown query path"), app.trace)
 }
 
 // ListSnapshots implements the ABCI interface. It delegates to app.snapshotManager if set.
@@ -785,7 +793,7 @@ func handleQueryApp(app *BaseApp, path []string, req abci.RequestQuery) abci.Res
 
 			responseValue, err := json.Marshal(response)
 			if err != nil {
-				sdkerrors.QueryResult(sdkerrors.Wrap(err, fmt.Sprintf("failed to marshal list snapshots response %v", response)))
+				sdkerrors.QueryResult(sdkerrors.Wrap(err, fmt.Sprintf("failed to marshal list snapshots response %v", response)), app.trace)
 			}
 
 			return abci.ResponseQuery{
@@ -899,6 +907,20 @@ func handleQueryCustom(app *BaseApp, path []string, req abci.RequestQuery) abci.
 //
 // e.g. "this/is/funny" becomes []string{"this", "is", "funny"}
 func splitPath(requestPath string) (path []string) {
+	path = strings.Split(requestPath, "/")
+
+	// first element is empty string
+	if len(path) > 0 && path[0] == "" {
+		path = path[1:]
+	}
+
+	return path
+}
+
+// SplitABCIQueryPath splits a string path using the delimiter '/'.
+//
+// e.g. "this/is/funny" becomes []string{"this", "is", "funny"}
+func SplitABCIQueryPath(requestPath string) (path []string) {
 	path = strings.Split(requestPath, "/")
 
 	// first element is empty string
