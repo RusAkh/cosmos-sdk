@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"math/rand"
 
+	modulev1 "cosmossdk.io/api/cosmos/auth/module/v1"
+	"cosmossdk.io/core/appmodule"
+	"cosmossdk.io/depinject"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	"github.com/gorilla/mux"
@@ -20,6 +23,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/rest"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+
+	"github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -93,14 +99,18 @@ type AppModule struct {
 
 	accountKeeper     keeper.AccountKeeper
 	randGenAccountsFn types.RandomGenesisAccountsFn
+
+	// legacySubspace is used solely for migration of x/params managed parameters
+	legacySubspace exported.Subspace
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(cdc codec.Codec, accountKeeper keeper.AccountKeeper, randGenAccountsFn types.RandomGenesisAccountsFn) AppModule {
+func NewAppModule(cdc codec.Codec, accountKeeper keeper.AccountKeeper, randGenAccountsFn types.RandomGenesisAccountsFn, ss exported.Subspace) AppModule {
 	return AppModule{
 		AppModuleBasic:    AppModuleBasic{},
 		accountKeeper:     accountKeeper,
 		randGenAccountsFn: randGenAccountsFn,
+		legacySubspace:    ss,
 	}
 }
 
@@ -108,6 +118,12 @@ func NewAppModule(cdc codec.Codec, accountKeeper keeper.AccountKeeper, randGenAc
 func (AppModule) Name() string {
 	return types.ModuleName
 }
+
+// IsAppModule implements the appmodule.AppModule interface.
+func (am AppModule) IsAppModule() {}
+
+// IsOnePerModuleType implements the depinject.OnePerModuleType interface.
+func (am AppModule) IsOnePerModuleType() {}
 
 // RegisterInvariants performs a no-op.
 func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
@@ -189,4 +205,53 @@ func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
 // WeightedOperations doesn't return any auth module operation.
 func (AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
 	return nil
+}
+
+type AuthInputs struct {
+	depinject.In
+
+	Config *modulev1.Module
+	Key    sdk.KVStoreKey
+	Cdc    codec.Codec
+
+	RandomGenesisAccountsFn types.RandomGenesisAccountsFn `optional:"true"`
+	AccountI                func() types.AccountI         `optional:"true"`
+
+	// LegacySubspace is used solely for migration of x/params managed parameters
+	LegacySubspace exported.Subspace `optional:"true"`
+}
+type AuthOutputs struct {
+	depinject.Out
+
+	AccountKeeper keeper.AccountKeeper
+	Module        appmodule.AppModule
+}
+
+func init() {
+	appmodule.Register(&modulev1.Module{})
+}
+func ProvideModule(in AuthInputs) AuthOutputs {
+	maccPerms := map[string][]string{}
+	for _, permission := range in.Config.ModuleAccountPermissions {
+		maccPerms[permission.Account] = permission.Permissions
+	}
+
+	// default to governance authority if not provided
+	authority := types.NewModuleAddress(govtypes.ModuleName)
+	if in.Config.Authority != "" {
+		authority = types.NewModuleAddressOrBech32Address(in.Config.Authority)
+	}
+
+	if in.RandomGenesisAccountsFn == nil {
+		in.RandomGenesisAccountsFn = simulation.RandomGenesisAccounts
+	}
+
+	if in.AccountI == nil {
+		in.AccountI = types.ProtoBaseAccount
+	}
+
+	k := keeper.NewAccountKeeper(in.Cdc, in.Key, in.AccountI, maccPerms, in.Config.Bech32Prefix, authority.String())
+	m := NewAppModule(in.Cdc, k, in.RandomGenesisAccountsFn, in.LegacySubspace)
+
+	return AuthOutputs{AccountKeeper: k, Module: m}
 }
