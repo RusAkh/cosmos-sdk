@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/cobra"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -40,7 +41,7 @@ func ValidateGenesisCmd(mbm module.BasicManager) *cobra.Command {
 			}
 
 			var genState map[string]json.RawMessage
-			if err = json.Unmarshal(genDoc.AppState, &genState); err != nil {
+			if err =  jsoniter.Unmarshal(genDoc.AppState, &genState); err != nil {
 				return fmt.Errorf("error unmarshalling genesis doc %s: %s", genesis, err.Error())
 			}
 

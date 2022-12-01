@@ -9,6 +9,7 @@ import (
 
 	"github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
+	jsoniter "github.com/json-iterator/go"
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -92,7 +93,7 @@ func TypedEventToEvent(tev proto.Message) (Event, error) {
 	}
 
 	var attrMap map[string]json.RawMessage
-	err = json.Unmarshal(evtJSON, &attrMap)
+	err =  jsoniter.Unmarshal(evtJSON, &attrMap)
 	if err != nil {
 		return Event{}, err
 	}

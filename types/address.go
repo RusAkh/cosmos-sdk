@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/hashicorp/golang-lru/simplelru"
+	jsoniter "github.com/json-iterator/go"
 	yaml "gopkg.in/yaml.v2"
 
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -225,7 +226,7 @@ func (aa AccAddress) MarshalYAML() (interface{}, error) {
 // UnmarshalJSON unmarshals from JSON assuming Bech32 encoding.
 func (aa *AccAddress) UnmarshalJSON(data []byte) error {
 	var s string
-	err := json.Unmarshal(data, &s)
+	err :=  jsoniter.Unmarshal(data, &s)
 
 	if err != nil {
 		return err
@@ -375,7 +376,7 @@ func (va ValAddress) MarshalYAML() (interface{}, error) {
 func (va *ValAddress) UnmarshalJSON(data []byte) error {
 	var s string
 
-	err := json.Unmarshal(data, &s)
+	err :=  jsoniter.Unmarshal(data, &s)
 	if err != nil {
 		return err
 	}
@@ -530,7 +531,7 @@ func (ca ConsAddress) MarshalYAML() (interface{}, error) {
 func (ca *ConsAddress) UnmarshalJSON(data []byte) error {
 	var s string
 
-	err := json.Unmarshal(data, &s)
+	err :=  jsoniter.Unmarshal(data, &s)
 	if err != nil {
 		return err
 	}

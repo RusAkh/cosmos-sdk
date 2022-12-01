@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	jsoniter "github.com/json-iterator/go"
 	db "github.com/tendermint/tm-db"
 )
 
@@ -39,7 +40,7 @@ func (ps *ParamStore) Get(_ sdk.Context, key []byte, ptr interface{}) {
 		return
 	}
 
-	if err := json.Unmarshal(bz, ptr); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, ptr); err != nil {
 		panic(err)
 	}
 }

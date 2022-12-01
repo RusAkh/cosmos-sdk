@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -60,7 +61,7 @@ func AppStateFn(cdc codec.JSONCodec, simManager *module.SimulationManager) simty
 				panic(err)
 			}
 
-			err = json.Unmarshal(bz, &appParams)
+			err = jsoniter.Unmarshal(bz, &appParams)
 			if err != nil {
 				panic(err)
 			}
@@ -72,7 +73,7 @@ func AppStateFn(cdc codec.JSONCodec, simManager *module.SimulationManager) simty
 		}
 
 		rawState := make(map[string]json.RawMessage)
-		err := json.Unmarshal(appState, &rawState)
+		err := jsoniter.Unmarshal(appState, &rawState)
 		if err != nil {
 			panic(err)
 		}
@@ -207,7 +208,7 @@ func AppStateFromGenesisFileFn(r io.Reader, cdc codec.JSONCodec, genesisFile str
 	}
 
 	var appState GenesisState
-	err = json.Unmarshal(genesis.AppState, &appState)
+	err = jsoniter.Unmarshal(genesis.AppState, &appState)
 	if err != nil {
 		panic(err)
 	}

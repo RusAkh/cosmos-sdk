@@ -2,11 +2,11 @@ package hd_test
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"testing"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 
 	bip39 "github.com/cosmos/go-bip39"
@@ -40,7 +40,7 @@ func initFundraiserTestVectors(t *testing.T) []addrData {
 		t.Fatalf("could not read fundraiser test vector file (testdata/test.json): %s", err)
 	}
 
-	err = json.Unmarshal(b, &hdToAddrTable)
+	err = jsoniter.Unmarshal(b, &hdToAddrTable)
 	if err != nil {
 		t.Fatalf("could not decode test vectors (testdata/test.json): %s", err)
 	}

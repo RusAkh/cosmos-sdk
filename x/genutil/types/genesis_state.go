@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	jsoniter "github.com/json-iterator/go"
 	tmos "github.com/tendermint/tendermint/libs/os"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -70,7 +71,7 @@ func SetGenesisStateInAppState(
 // NOTE: The pubkey input is this machines pubkey.
 func GenesisStateFromGenDoc(genDoc tmtypes.GenesisDoc) (genesisState map[string]json.RawMessage, err error) {
 
-	if err = json.Unmarshal(genDoc.AppState, &genesisState); err != nil {
+	if err =  jsoniter.Unmarshal(genDoc.AppState, &genesisState); err != nil {
 		return genesisState, err
 	}
 	return genesisState, nil

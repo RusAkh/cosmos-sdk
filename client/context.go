@@ -2,10 +2,10 @@ package client
 
 import (
 	"bufio"
-	"encoding/json"
 	"io"
 	"os"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/viper"
 
 	"gopkg.in/yaml.v2"
@@ -314,7 +314,7 @@ func (ctx Context) printOutput(out []byte) error {
 		// handle text format by decoding and re-encoding JSON as YAML
 		var j interface{}
 
-		err := json.Unmarshal(out, &j)
+		err := jsoniter.Unmarshal(out, &j)
 		if err != nil {
 			return err
 		}

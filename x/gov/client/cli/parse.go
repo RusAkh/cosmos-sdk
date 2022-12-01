@@ -1,10 +1,10 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/pflag"
 
 	govutils "github.com/cosmos/cosmos-sdk/x/gov/client/utils"
@@ -35,7 +35,7 @@ func parseSubmitProposalFlags(fs *pflag.FlagSet) (*proposal, error) {
 		return nil, err
 	}
 
-	err = json.Unmarshal(contents, proposal)
+	err =  jsoniter.Unmarshal(contents, proposal)
 	if err != nil {
 		return nil, err
 	}

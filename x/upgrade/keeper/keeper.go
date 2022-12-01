@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"sort"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
 
@@ -382,7 +383,7 @@ func (k Keeper) ReadUpgradeInfoFromDisk() (store.UpgradeInfo, error) {
 		return upgradeInfo, err
 	}
 
-	if err := json.Unmarshal(data, &upgradeInfo); err != nil {
+	if err :=  jsoniter.Unmarshal(data, &upgradeInfo); err != nil {
 		return upgradeInfo, err
 	}
 

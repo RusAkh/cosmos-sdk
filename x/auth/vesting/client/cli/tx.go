@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strconv"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -111,7 +111,7 @@ func readScheduleFile(path string) (int64, []types.Period, error) {
 	}
 
 	var data VestingData
-	if err := json.Unmarshal(contents, &data); err != nil {
+	if err :=  jsoniter.Unmarshal(contents, &data); err != nil {
 		return 0, nil, err
 	}
 

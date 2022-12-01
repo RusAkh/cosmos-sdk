@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -48,7 +49,7 @@ func TestMigrateJSON(t *testing.T) {
 
 	// Indent the JSON bz correctly.
 	var jsonObj map[string]interface{}
-	err = json.Unmarshal(bz, &jsonObj)
+	err =  jsoniter.Unmarshal(bz, &jsonObj)
 	require.NoError(t, err)
 	indentedBz, err := json.MarshalIndent(jsonObj, "", "\t")
 	require.NoError(t, err)

@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
@@ -401,7 +402,7 @@ func TestDumpUpgradeInfoToFile(t *testing.T) {
 	require.NoError(t, err)
 
 	var upgradeInfo storetypes.UpgradeInfo
-	err = json.Unmarshal(data, &upgradeInfo)
+	err =  jsoniter.Unmarshal(data, &upgradeInfo)
 	require.Nil(t, err)
 
 	t.Log("Verify upgrade height from file matches ")

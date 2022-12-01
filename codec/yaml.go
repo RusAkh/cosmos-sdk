@@ -1,9 +1,8 @@
 package codec
 
 import (
-	"encoding/json"
-
 	"github.com/gogo/protobuf/proto"
+	jsoniter "github.com/json-iterator/go"
 	"gopkg.in/yaml.v2"
 )
 
@@ -20,7 +19,7 @@ func MarshalYAML(cdc JSONCodec, toPrint proto.Message) ([]byte, error) {
 
 	// generate YAML by decoding JSON and re-encoding to YAML
 	var j interface{}
-	err = json.Unmarshal(bz, &j)
+	err = jsoniter.Unmarshal(bz, &j)
 	if err != nil {
 		return nil, err
 	}

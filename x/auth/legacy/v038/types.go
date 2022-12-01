@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strings"
 
+	jsoniter "github.com/json-iterator/go"
 	tmcrypto "github.com/tendermint/tendermint/crypto"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -193,7 +194,7 @@ func (acc BaseAccount) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unmarshals raw JSON bytes into a BaseAccount.
 func (acc *BaseAccount) UnmarshalJSON(bz []byte) error {
 	var alias baseAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &alias); err != nil {
 		return err
 	}
 
@@ -259,7 +260,7 @@ func (bva BaseVestingAccount) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unmarshals raw JSON bytes into a BaseVestingAccount.
 func (bva *BaseVestingAccount) UnmarshalJSON(bz []byte) error {
 	var alias vestingAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &alias); err != nil {
 		return err
 	}
 
@@ -328,7 +329,7 @@ func (cva ContinuousVestingAccount) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unmarshals raw JSON bytes into a ContinuousVestingAccount.
 func (cva *ContinuousVestingAccount) UnmarshalJSON(bz []byte) error {
 	var alias vestingAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &alias); err != nil {
 		return err
 	}
 
@@ -394,7 +395,7 @@ func (dva DelayedVestingAccount) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unmarshals raw JSON bytes into a DelayedVestingAccount.
 func (dva *DelayedVestingAccount) UnmarshalJSON(bz []byte) error {
 	var alias vestingAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &alias); err != nil {
 		return err
 	}
 
@@ -465,7 +466,7 @@ func (ma ModuleAccount) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unmarshals raw JSON bytes into a ModuleAccount.
 func (ma *ModuleAccount) UnmarshalJSON(bz []byte) error {
 	var alias moduleAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &alias); err != nil {
 		return err
 	}
 

@@ -7,6 +7,7 @@ import (
 	"math/big"
 	"testing"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/suite"
 	"gopkg.in/yaml.v2"
 
@@ -493,7 +494,7 @@ func (s *decimalTestSuite) TestDecEncoding() {
 		bz, err = json.Marshal(tc.input)
 		s.Require().NoError(err)
 		s.Require().Equal(tc.jsonStr, string(bz))
-		s.Require().NoError(json.Unmarshal(bz, &other))
+		s.Require().NoError( jsoniter.Unmarshal(bz, &other))
 		s.Require().True(tc.input.Equal(other))
 
 		bz, err = yaml.Marshal(tc.input)

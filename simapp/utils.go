@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
@@ -61,7 +62,7 @@ func SimulationOperations(app App, cdc codec.JSONCodec, config simtypes.Config) 
 			panic(err)
 		}
 
-		err = json.Unmarshal(bz, &simState.AppParams)
+		err =  jsoniter.Unmarshal(bz, &simState.AppParams)
 		if err != nil {
 			panic(err)
 		}

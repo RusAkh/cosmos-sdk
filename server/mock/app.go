@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/tendermint/tendermint/types"
 
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -90,7 +91,7 @@ func InitChainer(key sdk.StoreKey) func(sdk.Context, abci.RequestInitChain) abci
 		stateJSON := req.AppStateBytes
 
 		genesisState := new(GenesisJSON)
-		err := json.Unmarshal(stateJSON, genesisState)
+		err :=  jsoniter.Unmarshal(stateJSON, genesisState)
 		if err != nil {
 			panic(err) // TODO https://github.com/cosmos/cosmos-sdk/issues/468
 			// return sdk.ErrGenesisParse("").TraceCause(err, "")

@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
+	jsoniter "github.com/json-iterator/go"
 )
 
 type WeightedProposalContent interface {
@@ -147,7 +148,7 @@ type AppParams map[string]json.RawMessage
 // case of operation weights where Rand is not used).
 func (sp AppParams) GetOrGenerate(_ codec.JSONCodec, key string, ptr interface{}, r *rand.Rand, ps ParamSimulator) {
 	if v, ok := sp[key]; ok && v != nil {
-		err := json.Unmarshal(v, ptr)
+		err :=  jsoniter.Unmarshal(v, ptr)
 		if err != nil {
 			panic(err)
 		}

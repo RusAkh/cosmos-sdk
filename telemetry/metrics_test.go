@@ -1,12 +1,12 @@
 package telemetry
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 	"time"
 
 	metrics "github.com/armon/go-metrics"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/prometheus/common/expfmt"
 	"github.com/stretchr/testify/require"
 )
@@ -33,7 +33,7 @@ func TestMetrics_InMem(t *testing.T) {
 	require.Equal(t, gr.ContentType, "application/json")
 
 	jsonMetrics := make(map[string]interface{})
-	require.NoError(t, json.Unmarshal(gr.Metrics, &jsonMetrics))
+	require.NoError(t,  jsoniter.Unmarshal(gr.Metrics, &jsonMetrics))
 
 	counters := jsonMetrics["Counters"].([]interface{})
 	require.Equal(t, counters[0].(map[string]interface{})["Count"].(float64), 10.0)

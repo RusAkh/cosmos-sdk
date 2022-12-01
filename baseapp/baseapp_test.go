@@ -3,7 +3,6 @@ package baseapp
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -14,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/jsonpb"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -1865,7 +1865,7 @@ func TestListSnapshots(t *testing.T) {
 	})
 
 	queryListSnapshotsResp := abci.ResponseListSnapshots{}
-	err = json.Unmarshal(queryResponse.Value, &queryListSnapshotsResp)
+	err = jsoniter.Unmarshal(queryResponse.Value, &queryListSnapshotsResp)
 	require.NoError(t, err)
 
 	for i, s := range resp.Snapshots {

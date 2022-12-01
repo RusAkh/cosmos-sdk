@@ -2,11 +2,11 @@ package types
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"math"
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
+	jsoniter "github.com/json-iterator/go"
 	abci "github.com/tendermint/tendermint/abci/types"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 
@@ -193,7 +193,7 @@ func NewSearchTxsResult(totalCount, count, page, limit uint64, txs []*TxResponse
 // ParseABCILogs attempts to parse a stringified ABCI tx log into a slice of
 // ABCIMessageLog types. It returns an error upon JSON decoding failure.
 func ParseABCILogs(logs string) (res ABCIMessageLogs, err error) {
-	err = json.Unmarshal([]byte(logs), &res)
+	err =  jsoniter.Unmarshal([]byte(logs), &res)
 	return res, err
 }
 

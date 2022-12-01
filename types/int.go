@@ -7,6 +7,8 @@ import (
 	"testing"
 
 	"math/big"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 const maxBitLen = 256
@@ -362,7 +364,7 @@ func marshalJSON(i encoding.TextMarshaler) ([]byte, error) {
 // Must be encoded as a string for JSON precision
 func unmarshalJSON(i *big.Int, bz []byte) error {
 	var text string
-	if err := json.Unmarshal(bz, &text); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &text); err != nil {
 		return err
 	}
 

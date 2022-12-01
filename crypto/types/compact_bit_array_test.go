@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"testing"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -111,7 +112,7 @@ func TestJSONMarshalUnmarshal(t *testing.T) {
 			assert.Equal(t, tc.marshalledBA, string(bz))
 
 			var unmarshalledBA *CompactBitArray
-			err = json.Unmarshal(bz, &unmarshalledBA)
+			err = jsoniter.Unmarshal(bz, &unmarshalledBA)
 			require.NoError(t, err)
 
 			if tc.bA == nil {
@@ -213,7 +214,7 @@ func TestCompactBitArrayNumOfTrueBitsBefore(t *testing.T) {
 		tcIndex := tcIndex
 		t.Run(tc.marshalledBA, func(t *testing.T) {
 			var bA *CompactBitArray
-			err := json.Unmarshal([]byte(tc.marshalledBA), &bA)
+			err := jsoniter.Unmarshal([]byte(tc.marshalledBA), &bA)
 			require.NoError(t, err)
 
 			for i := 0; i < len(tc.bAIndex); i++ {

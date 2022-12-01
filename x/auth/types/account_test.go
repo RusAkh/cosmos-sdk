@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"testing"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 	yaml "gopkg.in/yaml.v2"
 
@@ -192,7 +193,7 @@ func TestModuleAccountJSON(t *testing.T) {
 	require.Equal(t, string(bz1), string(bz))
 
 	var a types.ModuleAccount
-	require.NoError(t, json.Unmarshal(bz, &a))
+	require.NoError(t,  jsoniter.Unmarshal(bz, &a))
 	require.Equal(t, acc.String(), a.String())
 }
 

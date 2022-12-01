@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	auth "github.com/cosmos/cosmos-sdk/x/auth/types"
+	jsoniter "github.com/json-iterator/go"
 
 	"github.com/tendermint/tendermint/crypto"
 
@@ -229,7 +230,7 @@ func (c converter) Meta(msg sdk.Msg) (meta map[string]interface{}, err error) {
 		return nil, crgerrs.WrapError(crgerrs.ErrCodec, err.Error())
 	}
 
-	err = json.Unmarshal(b, &meta)
+	err =  jsoniter.Unmarshal(b, &meta)
 	if err != nil {
 		return nil, crgerrs.WrapError(crgerrs.ErrCodec, err.Error())
 	}

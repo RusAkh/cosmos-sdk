@@ -5,6 +5,7 @@ import (
 	"time"
 
 	crgerrs "github.com/cosmos/cosmos-sdk/server/rosetta/lib/errors"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // timeToMilliseconds converts time to milliseconds timestamp
@@ -19,7 +20,7 @@ func unmarshalMetadata(meta map[string]interface{}, target interface{}) error {
 		return crgerrs.WrapError(crgerrs.ErrCodec, err.Error())
 	}
 
-	err = json.Unmarshal(b, target)
+	err =  jsoniter.Unmarshal(b, target)
 	if err != nil {
 		return crgerrs.WrapError(crgerrs.ErrCodec, err.Error())
 	}
@@ -34,7 +35,7 @@ func marshalMetadata(o interface{}) (meta map[string]interface{}, err error) {
 		return nil, crgerrs.WrapError(crgerrs.ErrCodec, err.Error())
 	}
 	meta = make(map[string]interface{})
-	err = json.Unmarshal(b, &meta)
+	err =  jsoniter.Unmarshal(b, &meta)
 	if err != nil {
 		return nil, err
 	}

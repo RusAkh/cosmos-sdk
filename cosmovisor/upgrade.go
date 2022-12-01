@@ -1,7 +1,6 @@
 package cosmovisor
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -12,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/hashicorp/go-getter"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/otiai10/copy"
 )
 
@@ -128,7 +128,7 @@ func GetDownloadURL(info *UpgradeInfo) (string, error) {
 	// check if it is the upgrade config
 	var config UpgradeConfig
 
-	if err := json.Unmarshal([]byte(doc), &config); err == nil {
+	if err := jsoniter.Unmarshal([]byte(doc), &config); err == nil {
 		url, ok := config.Binaries[OSArch()]
 		if !ok {
 			url, ok = config.Binaries["any"]

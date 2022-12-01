@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
+	jsoniter "github.com/json-iterator/go"
 	"github.com/tendermint/tendermint/crypto"
 	"gopkg.in/yaml.v2"
 
@@ -287,7 +288,7 @@ func (ma ModuleAccount) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON unmarshals raw JSON bytes into a ModuleAccount.
 func (ma *ModuleAccount) UnmarshalJSON(bz []byte) error {
 	var alias moduleAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
+	if err :=  jsoniter.Unmarshal(bz, &alias); err != nil {
 		return err
 	}
 

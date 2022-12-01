@@ -48,7 +48,7 @@ func (em *EventManager) EmitTypedEvent(event proto.Message) error {
 	}
 
 	var attrMap map[string]json.RawMessage
-	err = json.Unmarshal(evtJSON, &attrMap)
+	err =  jsoniter.Unmarshal(evtJSON, &attrMap)
 	if err != nil {
 		return err
 	}

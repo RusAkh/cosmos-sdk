@@ -10,6 +10,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // Implements Delegation interface
@@ -316,7 +317,7 @@ func (d DelegationResponse) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON implements the json.Unmarshaler interface. This is so we can
 // achieve a flattened structure while embedding other types.
 func (d *DelegationResponse) UnmarshalJSON(bz []byte) error {
-	return json.Unmarshal(bz, (*delegationRespAlias)(d))
+	return  jsoniter.Unmarshal(bz, (*delegationRespAlias)(d))
 }
 
 // DelegationResponses is a collection of DelegationResp
@@ -366,7 +367,7 @@ func (r RedelegationResponse) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON implements the json.Unmarshaler interface. This is so we can
 // achieve a flattened structure while embedding other types.
 func (r *RedelegationResponse) UnmarshalJSON(bz []byte) error {
-	return json.Unmarshal(bz, (*redelegationRespAlias)(r))
+	return  jsoniter.Unmarshal(bz, (*redelegationRespAlias)(r))
 }
 
 // RedelegationResponses are a collection of RedelegationResp

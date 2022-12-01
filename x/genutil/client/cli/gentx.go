@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -89,7 +90,7 @@ $ %s gentx my-key-name 1000000stake --home=/path/to/home/dir --keyring-backend=o
 			}
 
 			var genesisState map[string]json.RawMessage
-			if err = json.Unmarshal(genDoc.AppState, &genesisState); err != nil {
+			if err =  jsoniter.Unmarshal(genDoc.AppState, &genesisState); err != nil {
 				return errors.Wrap(err, "failed to unmarshal genesis state")
 			}
 

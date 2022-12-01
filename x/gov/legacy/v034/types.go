@@ -11,6 +11,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	jsoniter "github.com/json-iterator/go"
 )
 
 var (
@@ -179,7 +180,7 @@ func (status ProposalStatus) MarshalJSON() ([]byte, error) {
 
 func (status *ProposalStatus) UnmarshalJSON(data []byte) error {
 	var s string
-	err := json.Unmarshal(data, &s)
+	err :=  jsoniter.Unmarshal(data, &s)
 	if err != nil {
 		return err
 	}
@@ -249,7 +250,7 @@ func (vo VoteOption) MarshalJSON() ([]byte, error) {
 
 func (vo *VoteOption) UnmarshalJSON(data []byte) error {
 	var s string
-	err := json.Unmarshal(data, &s)
+	err :=  jsoniter.Unmarshal(data, &s)
 	if err != nil {
 		return err
 	}
@@ -304,7 +305,7 @@ func (pt ProposalKind) MarshalJSON() ([]byte, error) {
 
 func (pt *ProposalKind) UnmarshalJSON(data []byte) error {
 	var s string
-	err := json.Unmarshal(data, &s)
+	err :=  jsoniter.Unmarshal(data, &s)
 	if err != nil {
 		return err
 	}

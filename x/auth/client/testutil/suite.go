@@ -10,6 +10,7 @@ import (
 	"strings"
 	"testing"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
@@ -190,7 +191,7 @@ func (s *IntegrationTestSuite) TestCLISignAminoJSON() {
 		Signatures []json.RawMessage
 	}
 	var txOut txFragment
-	err = json.Unmarshal(res.Bytes(), &txOut)
+	err =  jsoniter.Unmarshal(res.Bytes(), &txOut)
 	require.NoError(err)
 	require.Len(txOut.Signatures, 1)
 

@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 var _ CustomProtobufType = (*Dec)(nil)
@@ -767,7 +769,7 @@ func (d *Dec) UnmarshalJSON(bz []byte) error {
 	}
 
 	var text string
-	err := json.Unmarshal(bz, &text)
+	err :=  jsoniter.Unmarshal(bz, &text)
 	if err != nil {
 		return err
 	}

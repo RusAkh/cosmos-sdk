@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 
+	jsoniter "github.com/json-iterator/go"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	"github.com/tendermint/tendermint/types"
@@ -153,7 +154,7 @@ func (w WeightedProposalContent) ContentSimulatorFn() simulation.ContentSimulato
 // randomConsensusParams returns random simulation consensus parameters, it extracts the Evidence from the Staking genesis state.
 func randomConsensusParams(r *rand.Rand, appState json.RawMessage, cdc codec.JSONCodec) *abci.ConsensusParams {
 	var genesisState map[string]json.RawMessage
-	err := json.Unmarshal(appState, &genesisState)
+	err :=  jsoniter.Unmarshal(appState, &genesisState)
 	if err != nil {
 		panic(err)
 	}

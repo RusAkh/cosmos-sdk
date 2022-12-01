@@ -6,6 +6,7 @@ import (
 	"sort"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	tmjson "github.com/tendermint/tendermint/libs/json"
@@ -83,7 +84,7 @@ $ %s migrate v0.36 /path/to/genesis.json --chain-id=cosmoshub-3 --genesis-time=2
 			}
 
 			var initialState types.AppMap
-			if err := json.Unmarshal(genDoc.AppState, &initialState); err != nil {
+			if err :=  jsoniter.Unmarshal(genDoc.AppState, &initialState); err != nil {
 				return errors.Wrap(err, "failed to JSON unmarshal initial genesis state")
 			}
 

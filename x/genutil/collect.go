@@ -13,6 +13,7 @@ import (
 	"sort"
 	"strings"
 
+	jsoniter "github.com/json-iterator/go"
 	cfg "github.com/tendermint/tendermint/config"
 	tmtypes "github.com/tendermint/tendermint/types"
 
@@ -75,7 +76,7 @@ func CollectTxs(cdc codec.JSONCodec, txJSONDecoder sdk.TxDecoder, moniker, genTx
 	// prepare a map of all balances in genesis state to then validate
 	// against the validators addresses
 	var appState map[string]json.RawMessage
-	if err := json.Unmarshal(genDoc.AppState, &appState); err != nil {
+	if err :=  jsoniter.Unmarshal(genDoc.AppState, &appState); err != nil {
 		return appGenTxs, persistentPeers, err
 	}
 
