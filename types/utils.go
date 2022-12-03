@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
+	dbm "github.com/cosmos/cosmos-db"
 	jsoniter "github.com/json-iterator/go"
-	dbm "github.com/tendermint/tm-db"
 )
 
 var (
@@ -29,7 +29,7 @@ func init() {
 // If the passed JSON isn't valid it will return an error.
 func SortJSON(toSortJSON []byte) ([]byte, error) {
 	var c interface{}
-	err :=  jsoniter.Unmarshal(toSortJSON, &c)
+	err := jsoniter.Unmarshal(toSortJSON, &c)
 	if err != nil {
 		return nil, err
 	}

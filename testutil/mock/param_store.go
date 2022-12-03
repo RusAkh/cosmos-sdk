@@ -3,9 +3,9 @@ package mock
 import (
 	"encoding/json"
 
+	db "github.com/cosmos/cosmos-db"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	jsoniter "github.com/json-iterator/go"
-	db "github.com/tendermint/tm-db"
 )
 
 type ParamStore struct {
@@ -40,7 +40,7 @@ func (ps *ParamStore) Get(_ sdk.Context, key []byte, ptr interface{}) {
 		return
 	}
 
-	if err :=  jsoniter.Unmarshal(bz, ptr); err != nil {
+	if err := jsoniter.Unmarshal(bz, ptr); err != nil {
 		panic(err)
 	}
 }

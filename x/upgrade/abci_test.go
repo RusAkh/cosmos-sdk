@@ -9,12 +9,12 @@ import (
 	"testing"
 	"time"
 
+	dbm "github.com/cosmos/cosmos-db"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -402,7 +402,7 @@ func TestDumpUpgradeInfoToFile(t *testing.T) {
 	require.NoError(t, err)
 
 	var upgradeInfo storetypes.UpgradeInfo
-	err =  jsoniter.Unmarshal(data, &upgradeInfo)
+	err = jsoniter.Unmarshal(data, &upgradeInfo)
 	require.Nil(t, err)
 
 	t.Log("Verify upgrade height from file matches ")

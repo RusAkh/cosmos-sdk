@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	dbm "github.com/cosmos/cosmos-db"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/tendermint/tendermint/libs/log"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/simapp/helpers"
@@ -62,7 +62,7 @@ func SimulationOperations(app App, cdc codec.JSONCodec, config simtypes.Config) 
 			panic(err)
 		}
 
-		err =  jsoniter.Unmarshal(bz, &simState.AppParams)
+		err = jsoniter.Unmarshal(bz, &simState.AppParams)
 		if err != nil {
 			panic(err)
 		}

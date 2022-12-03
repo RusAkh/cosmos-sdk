@@ -7,12 +7,12 @@ import (
 	"os"
 	"testing"
 
+	dbm "github.com/cosmos/cosmos-db"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/simapp/helpers"
@@ -150,7 +150,7 @@ func TestAppImportExport(t *testing.T) {
 	require.Equal(t, "SimApp", newApp.Name())
 
 	var genesisState GenesisState
-	err =  jsoniter.Unmarshal(exported.AppState, &genesisState)
+	err = jsoniter.Unmarshal(exported.AppState, &genesisState)
 	require.NoError(t, err)
 
 	ctxA := app.NewContext(true, tmproto.Header{Height: app.LastBlockHeight()})

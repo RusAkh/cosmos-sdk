@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/cosmos/cosmos-sdk/pruning"
 	pruningtypes "github.com/cosmos/cosmos-sdk/pruning/types"
 	iavltree "github.com/cosmos/iavl"
@@ -18,7 +19,6 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	"github.com/tendermint/tendermint/proto/tendermint/crypto"
-	dbm "github.com/tendermint/tm-db"
 
 	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
 	"github.com/cosmos/cosmos-sdk/store/cachemulti"

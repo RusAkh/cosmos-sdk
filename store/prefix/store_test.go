@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/store/cachekv"
 
 	"github.com/stretchr/testify/require"
-	dbm "github.com/tendermint/tm-db"
+	dbm "github.com/cosmos/cosmos-db"
 
 	tiavl "github.com/cosmos/iavl"
 

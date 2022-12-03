@@ -1,12 +1,13 @@
 package rootmulti
 
 import (
-	"github.com/tendermint/tendermint/libs/log"
 	"testing"
 
+	"github.com/tendermint/tendermint/libs/log"
+
+	dbm "github.com/cosmos/cosmos-db"
 	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/store/iavl"
 	"github.com/cosmos/cosmos-sdk/store/types"

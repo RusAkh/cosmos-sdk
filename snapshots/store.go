@@ -10,8 +10,8 @@ import (
 	"strconv"
 	"sync"
 
+	db "github.com/cosmos/cosmos-db"
 	"github.com/gogo/protobuf/proto"
-	db "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/snapshots/types"
 	store "github.com/cosmos/cosmos-sdk/store/types"
